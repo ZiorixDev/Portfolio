@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ziorix Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one scrolling page, sticky block-toolbar nav, sections stacked like chunks; a console strip in the hero */
+:root {
+  --bg: #e8eef6;
+  --surface: #f4f7fc;
+  --fg: #142033;
+  --muted: #53627b;
+  --line: #c6d2e3;
+  --accent: #1d5fc4;      /* deep blue */
+  --accent-2: #1d86ad;    /* cyan */
+  --console: #0f1726;
+  --console-fg: #d5e0f0;
+  --font-display: "Pixelify Sans", "Courier New", monospace;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1220; --surface: #131b2c; --fg: #e2e9f4; --muted: #8fa0bb; --line: #243250;
+    --accent: #5a9cf8; --accent-2: #4cc2e3; --console: #080d17; --console-fg: #d5e0f0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c1220; --surface: #131b2c; --fg: #e2e9f4; --muted: #8fa0bb; --line: #243250;
+  --accent: #5a9cf8; --accent-2: #4cc2e3; --console: #080d17; --console-fg: #d5e0f0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0;
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap {
+  max-width: 960px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+header.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--surface); border-bottom: 2px solid var(--line);
+}
+header.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; text-decoration: none; letter-spacing: .02em; }
+.brand span { color: var(--accent); }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; flex-wrap: wrap; }
+nav a {
+  display: block; text-decoration: none; font-family: var(--font-mono); font-size: .8rem;
+  padding: 6px 10px; border: 2px solid transparent; color: var(--muted);
+}
+nav a:hover, nav a.active { color: var(--fg); border-color: var(--line); background: var(--bg); }
+nav a.active { border-color: var(--accent); }
+
+section { padding-block: 64px; border-bottom: 2px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.1; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin-bottom: 24px; }
+p { max-width: 65ch; }
+
+.hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: clamp(3rem, 9vw, 5.2rem); }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.roles { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; padding: 0; list-style: none; }
+.roles li { font-family: var(--font-mono); font-size: .8rem; padding: 4px 10px; border: 2px solid var(--accent); color: var(--accent); }
+.hero .lede { font-size: 1.15rem; color: var(--muted); margin: 18px 0 28px; }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  font-family: var(--font-mono); font-weight: 600; font-size: .85rem; text-decoration: none;
+  padding: 10px 16px; border: 2px solid var(--fg); background: var(--fg); color: var(--bg);
+  box-shadow: 4px 4px 0 var(--accent); transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--accent); }
+.btn.ghost { background: transparent; color: var(--fg); box-shadow: 4px 4px 0 var(--line); }
+
+.console {
+  background: var(--console); color: var(--console-fg); font-family: var(--font-mono); font-size: .8rem;
+  border: 2px solid var(--line); overflow-x: auto;
+}
+.console .bar { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid #ffffff1a; color: #7f8ca3; }
+.console pre { margin: 0; padding: 14px 16px; line-height: 1.7; white-space: pre; }
+.c-time { color: #6f7d95; } .c-ok { color: #6fd0ea; } .c-key { color: #7fb2ff; }
+.cursor { display: inline-block; width: .6em; height: 1em; background: var(--console-fg); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
+
+.about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
+.about > * { min-width: 0; }
+.stack { display: grid; gap: 16px; align-content: start; }
+.skill { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); }
+.skill h3 { margin: 0 0 2px; font-size: 1rem; font-weight: 600; color: var(--accent); font-family: var(--font-mono); }
+.skill p { margin: 0; color: var(--muted); font-size: .92rem; }
+
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.job { padding: 24px; background: var(--surface); border: 2px solid var(--line); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.job .role { align-self: flex-start; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; background: var(--accent); color: var(--surface); padding: 3px 8px; margin-bottom: 8px; }
+.job h3 { margin: 0; font-family: var(--font-display); font-size: 1.8rem; line-height: 1.1; }
+.job .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.job .meta a { font-family: var(--font-mono); font-size: .8rem; text-decoration: none; padding: 5px 10px; border: 1px solid var(--line); background: var(--bg); }
+.job .meta a:hover { border-color: var(--accent); color: var(--accent); }
+
+.links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.link {
+  display: flex; flex-direction: column; gap: 4px; padding: 18px; text-decoration: none;
+  background: var(--surface); border: 2px solid var(--line); transition: border-color .12s, transform .12s;
+}
+a.link:hover { border-color: var(--accent); transform: translateY(-2px); }
+.link .k { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.link .v { font-weight: 600; overflow-wrap: anywhere; }
+.link.main { border-color: var(--accent); }
+.link.main .v { color: var(--accent); }
+
+footer { padding-block: 28px; font-family: var(--font-mono); font-size: .75rem; color: var(--muted); border-top: 2px solid var(--line); }
+
+@media (max-width: 720px) {
+  .hero, .about { grid-template-columns: 1fr; gap: 28px; }
+  section { padding-block: 44px; }
+}
+</style>
+
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#home">Ziorix<span>.net</span></a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#home" data-s="home">Home</a></li>
+        <li><a href="#about" data-s="about">About</a></li>
+        <li><a href="#experience" data-s="experience">Experience</a></li>
+        <li><a href="#links" data-s="links">Links</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="home">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">Minecraft servers &amp; communities</p>
+        <h1>Hi, I'm <em>Ziorix</em>.</h1>
+        <ul class="roles" aria-label="Roles">
+          <li>Builder</li><li>Developer</li><li>Moderator</li><li>Manager</li>
+        </ul>
+        <p class="lede">I build, code, moderate and run Minecraft servers. Owner of CrystalOps and Staff Manager at VexSMP.</p>
+        <div class="cta">
+          <a class="btn" href="#experience">See my experience</a>
+          <a class="btn ghost" href="#links">Contact me</a>
+        </div>
+      </div>
+      <div class="console" aria-label="Server console showing Ziorix's roles">
+        <div class="bar">● ● ● &nbsp;ziorix@console</div>
+        <pre><span class="c-time">[19:19:01]</span> Loading profile: Ziorix
+<span class="c-time">[19:19:01]</span> <span class="c-ok">✔</span> role: builder
+<span class="c-time">[19:19:02]</span> <span class="c-ok">✔</span> role: developer
+<span class="c-time">[19:19:02]</span> <span class="c-ok">✔</span> role: moderator
+<span class="c-time">[19:19:02]</span> <span class="c-ok">✔</span> role: manager
+<span class="c-time">[19:19:03]</span> <span class="c-key">Owner</span>  CrystalOps
+<span class="c-time">[19:19:03]</span> <span class="c-key">Staff</span>  VexSMP
+&gt; <span class="cursor"></span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <p class="eyebrow">About me</p>
+      <h2>A bit about Ziorix</h2>
+      <div class="about">
+        <div>
+          <p>I'm Ziorix, and I work on every side of a Minecraft server. I build the worlds players walk around in, write the code that runs underneath, and keep the community fair and friendly.</p>
+          <p>I own and run CrystalOps, and I lead the staff team at VexSMP as Staff Manager. That means hiring and training staff, handling reports and appeals, and keeping things running smoothly day to day.</p>
+          <p>If you need someone who can build, code, moderate or manage, I can help.</p>
+        </div>
+        <div class="stack">
+          <div class="skill"><h3>Builder</h3><p>Spawns, lobbies, maps and server builds.</p></div>
+          <div class="skill"><h3>Developer</h3><p>Plugins, scripts and Discord bots.</p></div>
+          <div class="skill"><h3>Moderator</h3><p>Keeping chat and gameplay fair and safe.</p></div>
+          <div class="skill"><h3>Manager</h3><p>Leading staff teams and running servers.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <p class="eyebrow">Experience</p>
+      <h2>Where I work</h2>
+      <ul class="timeline">
+        <li class="job">
+          <span class="role">Owner</span>
+          <h3>CrystalOps</h3>
+          <div class="meta">
+            <a href="https://crystalops.net" target="_blank" rel="noopener">CrystalOps.net</a>
+            <a href="https://discord.gg/crystalops" target="_blank" rel="noopener">discord.gg/crystalops</a>
+          </div>
+        </li>
+        <li class="job">
+          <span class="role">Staff Manager</span>
+          <h3>VexSMP</h3>
+          <div class="meta">
+            <a href="https://vexsmp.net" target="_blank" rel="noopener">VexSMP.net</a>
+            <a href="https://discord.gg/vexsmp" target="_blank" rel="noopener">discord.gg/vexsmp</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="links">
+    <div class="wrap">
+      <p class="eyebrow">Links</p>
+      <h2>Find me</h2>
+      <div class="links">
+        <a class="link main" href="https://github.com/ZiorixDev" target="_blank" rel="noopener">
+          <span class="k">GitHub</span><span class="v">github.com/ZiorixDev</span>
+        </a>
+        <a class="link" href="https://discord.gg/crystalops" target="_blank" rel="noopener">
+          <span class="k">Discord</span><span class="v">discord.gg/crystalops</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Ziorix · ziorix.net</div>
+</footer>
+
+<script>
+  const links = document.querySelectorAll('nav a');
+  const sections = Array.from(document.querySelectorAll('main section'));
+  const header = document.querySelector('header.nav');
+
+  function setActive(id) {
+    links.forEach(a => a.classList.toggle('active', a.dataset.s === id));
+  }
+
+  // Highlight the section currently under the nav bar
+  function sync() {
+    const line = header.getBoundingClientRect().bottom + 24;
+    let current = sections[0].id;
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top <= line) current = s.id;
+    }
+    const doc = document.documentElement;
+    if (window.innerHeight + window.scrollY >= doc.scrollHeight - 2) current = sections[sections.length - 1].id;
+    setActive(current);
+  }
+
+  // Clicking a nav link highlights it right away
+  links.forEach(a => a.addEventListener('click', () => setActive(a.dataset.s)));
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(() => { sync(); ticking = false; }); }
+  }, { passive: true });
+  window.addEventListener('resize', sync);
+
+  // Always open on Home
+  try { history.scrollRestoration = 'manual'; } catch (e) {}
+  window.scrollTo(0, 0);
+  setActive('home');
+  window.addEventListener('load', () => { window.scrollTo(0, 0); sync(); });
+</script>
+</body>
+</html>
